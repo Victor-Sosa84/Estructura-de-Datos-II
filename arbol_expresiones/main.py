@@ -7,7 +7,7 @@ conecta con su controlador.
 import flet as ft
 
 from views.vista_principal import VistaPrincipal
-#from controllers.controlador_principal import ControladorPrincipal
+from controllers.controlador_principal import ControladorPrincipal
 
 
 def main(page: ft.Page):
@@ -17,7 +17,7 @@ def main(page: ft.Page):
         page (ft.Page): Pagina principal provista por Flet.
     """
     vista = VistaPrincipal(page)
-    #ControladorPrincipal(vista)
+    ControladorPrincipal(vista)
 
 
 if __name__ == "__main__":
