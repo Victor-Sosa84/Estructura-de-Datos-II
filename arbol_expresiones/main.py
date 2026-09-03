@@ -16,6 +16,12 @@ def main(page: ft.Page):
     Args:
         page (ft.Page): Pagina principal provista por Flet.
     """
+    page.theme_mode = ft.ThemeMode.LIGHT
+
+    page.window.width = 400
+    page.window.height = 300
+    page.window.center()
+
     vista = VistaPrincipal(page)
     ControladorPrincipal(vista)
 
