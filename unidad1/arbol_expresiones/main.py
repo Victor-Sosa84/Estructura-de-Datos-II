@@ -1,4 +1,10 @@
-"""Punto de entrada de la aplicacion.
+"""
+titulo: Conversor de Expresiones (Infija a Prefija/Postfija)
+nombre: Victor David Sosa Coca
+fecha: 04/09/2026
+version: 1.0
+
+Punto de entrada de la aplicacion.
 
 Inicializa la aplicacion Flet, construye la vista principal y la
 conecta con su controlador.
@@ -19,7 +25,7 @@ def main(page: ft.Page):
     page.theme_mode = ft.ThemeMode.LIGHT
 
     page.window.width = 400
-    page.window.height = 300
+    page.window.height = 400
     page.window.center()
 
     vista = VistaPrincipal(page)
