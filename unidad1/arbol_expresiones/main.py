@@ -1,7 +1,7 @@
 """
 titulo: Conversor de Expresiones (Infija a Prefija/Postfija)
 nombre: Victor David Sosa Coca
-fecha: 04/09/2026
+fecha: 03/09/2026
 version: 1.0
 
 Punto de entrada de la aplicacion.
