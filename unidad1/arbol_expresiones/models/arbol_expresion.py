@@ -89,8 +89,8 @@ class ArbolExpresion:
 
             else:  # Operador (+, -, *, /)
                 while (pila_operadores and pila_operadores[-1] != '(' and
-                        self.precedencia(pila_operadores[-1]) >=
-                        self.precedencia(caracter)):
+                       self.precedencia(pila_operadores[-1]) >=
+                       self.precedencia(caracter)):
                     resolver()
                 pila_operadores.append(caracter)
 
@@ -162,3 +162,44 @@ class ArbolExpresion:
             str: Valores del recorrido postorden separados por espacio.
         """
         return ' '.join(self.postorden())
+
+    def mostrar_arbol(self, nodo=None, prefijo='', es_ultimo=True, es_raiz=True):
+        """Genera una representacion en texto del arbol con conectores.
+
+        Dibuja el arbol usando conectores de tipo '├──', '└──' y '│'
+        (estilo comando 'tree'), lo cual permite visualizar su
+        estructura de forma clara sin importar si es simetrico.
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar.
+                Si es None, comienza desde la raiz.
+            prefijo (str, optional): Prefijo acumulado de espacios y
+                lineas verticales heredado de los niveles anteriores.
+            es_ultimo (bool, optional): Indica si el nodo actual es
+                el ultimo hijo de su nodo padre.
+            es_raiz (bool, optional): Indica si el nodo actual es la
+                raiz del arbol completo.
+
+        Returns:
+            str: Texto con el arbol representado mediante conectores.
+        """
+        if nodo is None and es_raiz:
+            nodo = self.raiz
+
+        if nodo is None:
+            return ''
+
+        if es_raiz:
+            texto = str(nodo.valor) + '\n'
+            nuevo_prefijo = ''
+        else:
+            conector = '└── ' if es_ultimo else '├── '
+            texto = prefijo + conector + str(nodo.valor) + '\n'
+            nuevo_prefijo = prefijo + ('    ' if es_ultimo else '│   ')
+
+        hijos = [h for h in (nodo.izquierda, nodo.derecha) if h is not None]
+        for i, hijo in enumerate(hijos):
+            ultimo = (i == len(hijos) - 1)
+            texto += self.mostrar_arbol(hijo, nuevo_prefijo, ultimo, False)
+
+        return texto
