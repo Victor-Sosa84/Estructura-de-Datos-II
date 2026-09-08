@@ -23,6 +23,8 @@ class VistaPrincipal:
             conversion.
         campo_resultado (ft.TextField): Campo de solo lectura donde
             se muestra el resultado.
+        texto_arbol (ft.Text): Texto donde se muestra la estructura
+            del arbol de expresion.
     """
 
     def __init__(self, page):
@@ -57,11 +59,18 @@ class VistaPrincipal:
             read_only=True,
         )
 
+        self.texto_arbol = ft.Text(
+            value="",
+            font_family="Consolas, Courier New, monospace",
+            selectable=True,
+        )
+
         self.page.add(
             self.campo_expresion,
             self.opcion_conversion,
             self.boton_convertir,
             self.campo_resultado,
+            self.texto_arbol,
         )
 
     def mostrar_resultado(self, texto):
@@ -71,6 +80,16 @@ class VistaPrincipal:
             texto (str): Texto a mostrar como resultado.
         """
         self.campo_resultado.value = texto
+        self.page.update()
+
+    def mostrar_arbol(self, texto):
+        """Muestra la estructura del arbol en el control de texto.
+
+        Args:
+            texto (str): Texto con el arbol representado mediante
+                conectores.
+        """
+        self.texto_arbol.value = texto
         self.page.update()
 
     def mostrar_error(self, mensaje):

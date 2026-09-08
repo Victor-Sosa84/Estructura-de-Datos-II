@@ -29,8 +29,9 @@ class ControladorPrincipal:
     def convertir(self, e):
         """Maneja el evento de clic en el boton Convertir.
 
-        Valida que la expresion no este vacia, construye el arbol
-        y muestra la prefija o postfija segun la opcion elegida.
+        Valida que la expresion no este vacia, construye el arbol,
+        muestra la prefija o postfija segun la opcion elegida, y
+        muestra ademas la estructura del arbol generado.
 
         Args:
             e (ft.ControlEvent): Evento de clic emitido por Flet.
@@ -50,3 +51,4 @@ class ControladorPrincipal:
             resultado = arbol.obtener_postfija()
 
         self.vista.mostrar_resultado(resultado)
+        self.vista.mostrar_arbol(arbol.mostrar_arbol())
