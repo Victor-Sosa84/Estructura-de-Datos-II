@@ -76,7 +76,15 @@ class ArbolExpresion:
                 i += 1
                 continue
 
-            if caracter.isalnum():
+            if caracter.isdigit():
+                numero = ''
+                while i < len(expresion) and expresion[i].isdigit():
+                    numero += expresion[i]
+                    i += 1
+                pila_operandos.append(Nodo(numero))
+                continue
+
+            elif caracter.isalpha():
                 pila_operandos.append(Nodo(caracter))
 
             elif caracter == '(':
@@ -89,8 +97,8 @@ class ArbolExpresion:
 
             else:  # Operador (+, -, *, /)
                 while (pila_operadores and pila_operadores[-1] != '(' and
-                       self.precedencia(pila_operadores[-1]) >=
-                       self.precedencia(caracter)):
+                        self.precedencia(pila_operadores[-1]) >=
+                        self.precedencia(caracter)):
                     resolver()
                 pila_operadores.append(caracter)
 
@@ -203,3 +211,37 @@ class ArbolExpresion:
             texto += self.mostrar_arbol(hijo, nuevo_prefijo, ultimo, False)
 
         return texto
+
+    def evaluar(self, nodo=None):
+        """Calcula el valor numerico de la expresion representada.
+
+        Recorre el arbol de forma recursiva (postorden): primero
+        evalua los subarboles izquierdo y derecho, y luego aplica
+        el operador de la raiz a esos dos resultados.
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar la
+                evaluacion. Si es None, comienza desde la raiz.
+
+        Returns:
+            float: Resultado numerico de la expresion.
+        """
+        if nodo is None:
+            nodo = self.raiz
+
+        if nodo.es_hoja():
+            return float(nodo.valor)
+
+        izquierda = self.evaluar(nodo.izquierda)
+        derecha = self.evaluar(nodo.derecha)
+
+        if nodo.valor == '+':
+            return izquierda + derecha
+        if nodo.valor == '-':
+            return izquierda - derecha
+        if nodo.valor == '*':
+            return izquierda * derecha
+        if nodo.valor == '/':
+            return izquierda / derecha
+
+        raise ValueError(f"Operador no reconocido: {nodo.valor}")
