@@ -23,6 +23,10 @@ class VistaPrincipal:
             conversion.
         campo_resultado (ft.TextField): Campo de solo lectura donde
             se muestra el resultado.
+        campo_evaluacion (ft.TextField): Campo de solo lectura donde
+            se muestra el resultado numerico de la expresion.
+        titulo_arbol (ft.Text): Titulo mostrado sobre la
+            representacion en texto del arbol.
         texto_arbol (ft.Text): Texto donde se muestra la estructura
             del arbol de expresion.
     """
@@ -39,7 +43,7 @@ class VistaPrincipal:
 
         self.campo_expresion = ft.TextField(
             label="Expresion infija",
-            hint_text="Ej: a+b*c",
+            hint_text="Ej: 3+5*2",
         )
 
         self.opcion_conversion = ft.RadioGroup(
@@ -59,6 +63,16 @@ class VistaPrincipal:
             read_only=True,
         )
 
+        self.campo_evaluacion = ft.TextField(
+            label="Resultado numerico",
+            read_only=True,
+        )
+
+        self.titulo_arbol = ft.Text(
+            value="Arbol en Texto",
+            weight=ft.FontWeight.BOLD,
+        )
+
         self.texto_arbol = ft.Text(
             value="",
             font_family="Consolas, Courier New, monospace",
@@ -70,6 +84,8 @@ class VistaPrincipal:
             self.opcion_conversion,
             self.boton_convertir,
             self.campo_resultado,
+            self.campo_evaluacion,
+            self.titulo_arbol,
             self.texto_arbol,
         )
 
@@ -80,6 +96,15 @@ class VistaPrincipal:
             texto (str): Texto a mostrar como resultado.
         """
         self.campo_resultado.value = texto
+        self.page.update()
+
+    def mostrar_evaluacion(self, texto):
+        """Muestra el resultado numerico en su campo correspondiente.
+
+        Args:
+            texto (str): Texto con el resultado numerico a mostrar.
+        """
+        self.campo_evaluacion.value = texto
         self.page.update()
 
     def mostrar_arbol(self, texto):

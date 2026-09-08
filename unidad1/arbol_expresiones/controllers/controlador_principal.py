@@ -51,4 +51,5 @@ class ControladorPrincipal:
             resultado = arbol.obtener_postfija()
 
         self.vista.mostrar_resultado(resultado)
+        self.vista.mostrar_evaluacion(str(arbol.evaluar()))
         self.vista.mostrar_arbol(arbol.mostrar_arbol())

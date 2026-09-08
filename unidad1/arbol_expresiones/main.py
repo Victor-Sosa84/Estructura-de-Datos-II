@@ -1,7 +1,7 @@
 """
 titulo: Conversor de Expresiones (Infija a Prefija/Postfija)
 nombre: Victor David Sosa Coca
-fecha: 03/09/2026
+fecha: 04/09/2026
 version: 1.0
 
 Punto de entrada de la aplicacion.
@@ -23,9 +23,10 @@ def main(page: ft.Page):
         page (ft.Page): Pagina principal provista por Flet.
     """
     page.theme_mode = ft.ThemeMode.LIGHT
+    page.scroll = ft.ScrollMode.AUTO
 
     page.window.width = 400
-    page.window.height = 400
+    page.window.height = 500
     page.window.center()
 
     vista = VistaPrincipal(page)
