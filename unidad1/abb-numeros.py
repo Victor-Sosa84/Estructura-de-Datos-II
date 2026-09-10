@@ -114,10 +114,52 @@ class Arbol:
     # --- Rotaciones ---
 
     def rotacion_derecha(self, nodo):
-        pass
+        """Aplica una rotacion simple hacia la derecha.
+
+        Se usa cuando un nodo esta desbalanceado hacia la izquierda.
+        El hijo izquierdo del nodo pasa a ser la nueva raiz de este
+        subarbol, y el nodo original baja como su hijo derecho.
+
+        Args:
+            nodo (Nodo): Nodo desbalanceado sobre el cual rotar.
+
+        Returns:
+            Nodo: Nueva raiz del subarbol tras la rotacion.
+        """
+        pivote = nodo.izquierda
+        subarbol_temporal = pivote.derecha
+
+        pivote.derecha = nodo
+        nodo.izquierda = subarbol_temporal
+
+        self._actualizar_altura(nodo)
+        self._actualizar_altura(pivote)
+
+        return pivote
 
     def rotacion_izquierda(self, nodo):
-        pass
+        """Aplica una rotacion simple hacia la izquierda.
+
+        Se usa cuando un nodo esta desbalanceado hacia la derecha.
+        El hijo derecho del nodo pasa a ser la nueva raiz de este
+        subarbol, y el nodo original baja como su hijo izquierdo.
+
+        Args:
+            nodo (Nodo): Nodo desbalanceado sobre el cual rotar.
+
+        Returns:
+            Nodo: Nueva raiz del subarbol tras la rotacion.
+        """
+        pivote = nodo.derecha
+        subarbol_temporal = pivote.izquierda
+
+        pivote.izquierda = nodo
+        nodo.derecha = subarbol_temporal
+
+        self._actualizar_altura(nodo)
+        self._actualizar_altura(pivote)
+
+        return pivote
 
     def _balancear(self, nodo):
         pass
