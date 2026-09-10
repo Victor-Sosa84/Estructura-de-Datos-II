@@ -5,7 +5,11 @@ fecha: 09/09/2026
 version: 1.0
 """
 
+import sys
 from collections import deque
+
+if sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
 
 
 class Nodo:
@@ -521,4 +525,62 @@ class Arbol:
 
 
 if __name__ == "__main__":
-    pass
+    arbol = Arbol()
+
+    valores = [30, 20, 40, 10, 25, 50, 5]
+    print("Insertando valores:", valores)
+    for v in valores:
+        arbol.insertar(v)
+
+    print("\nArbol resultante:")
+    print(arbol)
+
+    print("Cantidad de nodos:", len(arbol))
+    print("Altura del arbol:", arbol.altura)
+    print("Factor de balance de la raiz:", arbol.factor_balance(arbol.raiz))
+
+    print("\nRecorridos:")
+    print("Preorden:   ", arbol.preorden())
+    print("Inorden:    ", arbol.inorden())
+    print("Postorden:  ", arbol.postorden())
+    print("Por niveles:", arbol.por_niveles())
+
+    print("\nConsultas:")
+    print("Minimo:", arbol.minimo(arbol.raiz).valor)
+    print("Maximo:", arbol.maximo(arbol.raiz).valor)
+    print("Nivel de 25:", arbol.nivel(25))
+    print("Buscar 25:", arbol.buscar(25))
+    print("Buscar 99:", arbol.buscar(99))
+
+    print("\n--- Casos clasicos de eliminacion (arboles independientes) ---")
+
+    print("\nCaso 1 - Eliminar un nodo hoja:")
+    arbol_caso1 = Arbol()
+    for v in [20, 10, 30]:
+        arbol_caso1.insertar(v)
+    print("Antes:")
+    print(arbol_caso1)
+    arbol_caso1.eliminar(10)  # 10 no tiene hijos.
+    print("Despues de eliminar 10:")
+    print(arbol_caso1)
+
+    print("\nCaso 2 - Eliminar un nodo con un solo hijo:")
+    arbol_caso2 = Arbol()
+    for v in [20, 10, 30, 5]:
+        arbol_caso2.insertar(v)
+    print("Antes:")
+    print(arbol_caso2)
+    arbol_caso2.eliminar(10)  # 10 solo tiene hijo izquierdo (5).
+    print("Despues de eliminar 10:")
+    print(arbol_caso2)
+
+    print("\nCaso 3 - Eliminar un nodo con dos hijos:")
+    arbol_caso3 = Arbol()
+    for v in [20, 10, 30, 5, 15]:
+        arbol_caso3.insertar(v)
+    print("Antes:")
+    print(arbol_caso3)
+    arbol_caso3.eliminar(10)  # 10 tiene dos hijos (5 y 15).
+    print("Despues de eliminar 10 (reemplazado por su sucesor):")
+    print(arbol_caso3)
+    print("Inorden:", arbol_caso3.inorden())
