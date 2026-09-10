@@ -194,10 +194,34 @@ class Arbol:
     # --- Operaciones principales ---
 
     def insertar(self, valor):
-        pass
+        """Inserta un valor en el arbol, manteniendo el balance AVL.
+
+        Args:
+            valor: Valor a insertar.
+        """
+        self._raiz = self._insertar_recursivo(self._raiz, valor)
 
     def _insertar_recursivo(self, nodo, valor):
-        pass
+        """Inserta un valor de forma recursiva y balancea el camino.
+
+        Args:
+            nodo (Nodo | None): Nodo actual del recorrido.
+            valor: Valor a insertar.
+
+        Returns:
+            Nodo: Raiz del subarbol (ya balanceada) tras la insercion.
+        """
+        if nodo is None:
+            return Nodo(valor)
+
+        if valor < nodo.valor:
+            nodo.izquierda = self._insertar_recursivo(nodo.izquierda, valor)
+        elif valor > nodo.valor:
+            nodo.derecha = self._insertar_recursivo(nodo.derecha, valor)
+        else:
+            return nodo  # Valor duplicado: no se inserta de nuevo.
+
+        return self._balancear(nodo)
 
     def eliminar(self, valor):
         pass
@@ -214,20 +238,55 @@ class Arbol:
     # --- Consultas ---
 
     def esta_vacio(self):
-        pass
+        """Indica si el arbol no tiene ningun nodo.
+
+        Returns:
+            bool: True si el arbol esta vacio, False en caso contrario.
+        """
+        return self._raiz is None
 
     @property
     def raiz(self):
-        pass
+        """Nodo raiz del arbol.
 
-    def contar_nodos(self, nodo=None):
-        pass
+        Returns:
+            Nodo | None: Nodo raiz, o None si el arbol esta vacio.
+        """
+        return self._raiz
+
+    _SIN_ESPECIFICAR = object()
+
+    def contar_nodos(self, nodo=_SIN_ESPECIFICAR):
+        """Cuenta la cantidad total de nodos del arbol.
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual contar. Si no
+                se especifica, comienza desde la raiz.
+
+        Returns:
+            int: Cantidad de nodos en el subarbol.
+        """
+        if nodo is self._SIN_ESPECIFICAR:
+            nodo = self._raiz
+        if nodo is None:
+            return 0
+        return 1 + self.contar_nodos(nodo.izquierda) + self.contar_nodos(nodo.derecha)
 
     def __len__(self):
-        pass
+        """Permite usar len(arbol) para obtener la cantidad de nodos.
+
+        Returns:
+            int: Cantidad de nodos en el arbol.
+        """
+        return self.contar_nodos()
 
     def __str__(self):
-        pass
+        """Permite usar print(arbol) para ver su representacion.
+
+        Returns:
+            str: Arbol representado en texto mediante mostrar_arbol.
+        """
+        return self.mostrar_arbol()
 
     def minimo(self, nodo):
         pass
