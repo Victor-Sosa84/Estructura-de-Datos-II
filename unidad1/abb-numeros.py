@@ -5,6 +5,8 @@ fecha: 09/09/2026
 version: 1.0
 """
 
+from collections import deque
+
 
 class Nodo:
     """Nodo de un arbol binario de busqueda balanceado.
@@ -296,17 +298,93 @@ class Arbol:
 
     # --- Recorridos ---
 
-    def preorden(self, nodo=None, resultado=None):
-        pass
+    def preorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
+        """Recorre el arbol en preorden (raiz, izquierda, derecha).
 
-    def inorden(self, nodo=None, resultado=None):
-        pass
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar. Si
+                no se especifica, comienza desde la raiz.
+            resultado (list, optional): Lista acumuladora de valores.
 
-    def postorden(self, nodo=None, resultado=None):
-        pass
+        Returns:
+            list: Valores del arbol en orden preorden.
+        """
+        if nodo is self._SIN_ESPECIFICAR:
+            nodo = self._raiz
+        if resultado is None:
+            resultado = []
+        if nodo is not None:
+            resultado.append(nodo.valor)
+            self.preorden(nodo.izquierda, resultado)
+            self.preorden(nodo.derecha, resultado)
+        return resultado
+
+    def inorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
+        """Recorre el arbol en inorden (izquierda, raiz, derecha).
+
+        En un arbol de busqueda valido, este recorrido devuelve los
+        valores ordenados de menor a mayor.
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar. Si
+                no se especifica, comienza desde la raiz.
+            resultado (list, optional): Lista acumuladora de valores.
+
+        Returns:
+            list: Valores del arbol en orden ascendente.
+        """
+        if nodo is self._SIN_ESPECIFICAR:
+            nodo = self._raiz
+        if resultado is None:
+            resultado = []
+        if nodo is not None:
+            self.inorden(nodo.izquierda, resultado)
+            resultado.append(nodo.valor)
+            self.inorden(nodo.derecha, resultado)
+        return resultado
+
+    def postorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
+        """Recorre el arbol en postorden (izquierda, derecha, raiz).
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar. Si
+                no se especifica, comienza desde la raiz.
+            resultado (list, optional): Lista acumuladora de valores.
+
+        Returns:
+            list: Valores del arbol en orden postorden.
+        """
+        if nodo is self._SIN_ESPECIFICAR:
+            nodo = self._raiz
+        if resultado is None:
+            resultado = []
+        if nodo is not None:
+            self.postorden(nodo.izquierda, resultado)
+            self.postorden(nodo.derecha, resultado)
+            resultado.append(nodo.valor)
+        return resultado
 
     def por_niveles(self):
-        pass
+        """Recorre el arbol nivel por nivel (BFS), de arriba a abajo.
+
+        Returns:
+            list: Valores del arbol ordenados por nivel de profundidad.
+        """
+        if self.esta_vacio():
+            return []
+
+        resultado = []
+        cola = deque([self._raiz])
+
+        while cola:
+            nodo = cola.popleft()
+            resultado.append(nodo.valor)
+            if nodo.izquierda is not None:
+                cola.append(nodo.izquierda)
+            if nodo.derecha is not None:
+                cola.append(nodo.derecha)
+
+        return resultado
 
     # --- Visualizacion ---
 
