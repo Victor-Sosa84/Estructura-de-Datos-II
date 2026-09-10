@@ -232,10 +232,33 @@ class Arbol:
         pass
 
     def buscar(self, valor):
-        pass
+        """Busca un valor dentro del arbol.
+
+        Args:
+            valor: Valor a buscar.
+
+        Returns:
+            bool: True si el valor existe en el arbol, False si no.
+        """
+        return self._buscar_recursivo(self._raiz, valor) is not None
 
     def _buscar_recursivo(self, nodo, valor):
-        pass
+        """Busca un valor de forma recursiva.
+
+        Args:
+            nodo (Nodo | None): Nodo actual del recorrido.
+            valor: Valor a buscar.
+
+        Returns:
+            Nodo | None: Nodo que contiene el valor, o None si no
+            se encuentra.
+        """
+        if nodo is None or nodo.valor == valor:
+            return nodo
+
+        if valor < nodo.valor:
+            return self._buscar_recursivo(nodo.izquierda, valor)
+        return self._buscar_recursivo(nodo.derecha, valor)
 
     # --- Consultas ---
 
@@ -291,10 +314,38 @@ class Arbol:
         return self.mostrar_arbol()
 
     def minimo(self, nodo):
-        pass
+        """Encuentra el nodo con el menor valor de un subarbol.
+
+        En un ABB, el minimo siempre esta en el extremo mas a la
+        izquierda del subarbol.
+
+        Args:
+            nodo (Nodo): Nodo raiz del subarbol a evaluar.
+
+        Returns:
+            Nodo: Nodo con el valor minimo del subarbol.
+        """
+        actual = nodo
+        while actual.izquierda is not None:
+            actual = actual.izquierda
+        return actual
 
     def maximo(self, nodo):
-        pass
+        """Encuentra el nodo con el mayor valor de un subarbol.
+
+        En un ABB, el maximo siempre esta en el extremo mas a la
+        derecha del subarbol.
+
+        Args:
+            nodo (Nodo): Nodo raiz del subarbol a evaluar.
+
+        Returns:
+            Nodo: Nodo con el valor maximo del subarbol.
+        """
+        actual = nodo
+        while actual.derecha is not None:
+            actual = actual.derecha
+        return actual
 
     # --- Recorridos ---
 
