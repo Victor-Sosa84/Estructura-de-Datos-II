@@ -388,8 +388,47 @@ class Arbol:
 
     # --- Visualizacion ---
 
-    def mostrar_arbol(self, nodo=None, prefijo='', es_ultimo=True, es_raiz=True):
-        pass
+    def mostrar_arbol(self, nodo=_SIN_ESPECIFICAR, prefijo='', es_ultimo=True,
+                        es_raiz=True):
+        """Genera una representacion en texto del arbol con conectores.
+
+        Dibuja el arbol usando conectores de tipo '├──', '└──' y '│'
+        (estilo comando 'tree'), lo cual permite visualizar su
+        estructura de forma clara sin importar si es simetrico.
+
+        Args:
+            nodo (Nodo, optional): Nodo desde el cual continuar. Si
+                no se especifica, comienza desde la raiz.
+            prefijo (str, optional): Prefijo acumulado de espacios y
+                lineas verticales heredado de los niveles anteriores.
+            es_ultimo (bool, optional): Indica si el nodo actual es
+                el ultimo hijo de su nodo padre.
+            es_raiz (bool, optional): Indica si el nodo actual es la
+                raiz del arbol completo.
+
+        Returns:
+            str: Texto con el arbol representado mediante conectores.
+        """
+        if nodo is self._SIN_ESPECIFICAR:
+            nodo = self._raiz
+
+        if nodo is None:
+            return '' if not es_raiz else '(arbol vacio)'
+
+        if es_raiz:
+            texto = str(nodo.valor) + '\n'
+            nuevo_prefijo = ''
+        else:
+            conector = '└── ' if es_ultimo else '├── '
+            texto = prefijo + conector + str(nodo.valor) + '\n'
+            nuevo_prefijo = prefijo + ('    ' if es_ultimo else '│   ')
+
+        hijos = [h for h in (nodo.izquierda, nodo.derecha) if h is not None]
+        for i, hijo in enumerate(hijos):
+            ultimo = (i == len(hijos) - 1)
+            texto += self.mostrar_arbol(hijo, nuevo_prefijo, ultimo, False)
+
+        return texto
 
 
 if __name__ == "__main__":
