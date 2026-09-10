@@ -162,7 +162,34 @@ class Arbol:
         return pivote
 
     def _balancear(self, nodo):
-        pass
+        """Balancea un nodo aplicando la rotacion AVL correspondiente.
+
+        Evalua el factor de balance del nodo y, si esta fuera del
+        rango permitido (-1 a 1), aplica la rotacion simple o doble
+        que corresponda segun el caso (izquierda-izquierda,
+        izquierda-derecha, derecha-derecha o derecha-izquierda).
+
+        Args:
+            nodo (Nodo): Nodo a evaluar y balancear.
+
+        Returns:
+            Nodo: Raiz del subarbol ya balanceado (puede ser el
+            mismo nodo si no hizo falta rotar).
+        """
+        self._actualizar_altura(nodo)
+        factor = self.factor_balance(nodo)
+
+        if factor > 1:
+            if self.factor_balance(nodo.izquierda) < 0:
+                nodo.izquierda = self.rotacion_izquierda(nodo.izquierda)
+            return self.rotacion_derecha(nodo)
+
+        if factor < -1:
+            if self.factor_balance(nodo.derecha) > 0:
+                nodo.derecha = self.rotacion_derecha(nodo.derecha)
+            return self.rotacion_izquierda(nodo)
+
+        return nodo
 
     # --- Operaciones principales ---
 
