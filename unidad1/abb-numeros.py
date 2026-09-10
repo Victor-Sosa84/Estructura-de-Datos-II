@@ -226,10 +226,48 @@ class Arbol:
         return self._balancear(nodo)
 
     def eliminar(self, valor):
-        pass
+        """Elimina un valor del arbol, manteniendo el balance AVL.
+
+        Args:
+            valor: Valor a eliminar.
+        """
+        self._raiz = self._eliminar_recursivo(self._raiz, valor)
 
     def _eliminar_recursivo(self, nodo, valor):
-        pass
+        """Elimina un valor de forma recursiva y balancea el camino.
+
+        Contempla los tres casos clasicos de eliminacion en un ABB:
+        nodo hoja, nodo con un solo hijo, y nodo con dos hijos (en
+        cuyo caso se reemplaza por su sucesor inorden).
+
+        Args:
+            nodo (Nodo | None): Nodo actual del recorrido.
+            valor: Valor a eliminar.
+
+        Returns:
+            Nodo | None: Raiz del subarbol (ya balanceada) tras la
+            eliminacion.
+        """
+        if nodo is None:
+            return None
+
+        if valor < nodo.valor:
+            nodo.izquierda = self._eliminar_recursivo(nodo.izquierda, valor)
+        elif valor > nodo.valor:
+            nodo.derecha = self._eliminar_recursivo(nodo.derecha, valor)
+        else:
+            # Caso 1: nodo hoja o Caso 2: un solo hijo.
+            if nodo.izquierda is None:
+                return nodo.derecha
+            if nodo.derecha is None:
+                return nodo.izquierda
+
+            # Caso 3: dos hijos, se reemplaza por el sucesor inorden.
+            sucesor = self.minimo(nodo.derecha)
+            nodo.valor = sucesor.valor
+            nodo.derecha = self._eliminar_recursivo(nodo.derecha, sucesor.valor)
+
+        return self._balancear(nodo)
 
     def buscar(self, valor):
         """Busca un valor dentro del arbol.
