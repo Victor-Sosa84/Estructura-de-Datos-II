@@ -7,32 +7,109 @@ version: 1.0
 
 
 class Nodo:
-    """Nodo de un arbol binario de busqueda balanceado."""
+    """Nodo de un arbol binario de busqueda balanceado.
+
+    Attributes:
+        valor: Valor almacenado en el nodo.
+        izquierda (Nodo | None): Hijo izquierdo del nodo.
+        derecha (Nodo | None): Hijo derecho del nodo.
+        altura (int): Altura del nodo dentro del arbol, usada para
+            calcular el factor de balance durante el balanceo AVL.
+    """
 
     def __init__(self, valor):
-        pass
+        """Inicializa un nodo hoja con el valor dado.
+
+        Args:
+            valor: Valor a almacenar en el nodo.
+        """
+        self.valor = valor
+        self.izquierda = None
+        self.derecha = None
+        self.altura = 1
 
 
 class Arbol:
     """Arbol Binario de Busqueda con balanceo automatico (AVL)."""
 
     def __init__(self):
-        pass
+        """Inicializa un arbol vacio."""
+        self._raiz = None
 
     # --- Utilidades de altura y balance ---
 
     def _altura_nodo(self, nodo):
-        pass
+        """Obtiene la altura almacenada de un nodo.
+
+        Args:
+            nodo (Nodo | None): Nodo a consultar.
+
+        Returns:
+            int: Altura del nodo, o 0 si el nodo es None.
+        """
+        if nodo is None:
+            return 0
+        return nodo.altura
 
     @property
     def altura(self):
-        pass
+        """Altura total del arbol (altura de la raiz).
+
+        Returns:
+            int: Altura del arbol, o 0 si esta vacio.
+        """
+        return self._altura_nodo(self._raiz)
 
     def nivel(self, valor):
-        pass
+        """Calcula la profundidad de un valor dentro del arbol.
+
+        La raiz se considera de nivel 0.
+
+        Args:
+            valor: Valor a buscar.
+
+        Returns:
+            int | None: Nivel del valor, o None si no se encuentra.
+        """
+        nodo = self._raiz
+        profundidad = 0
+        while nodo is not None:
+            if valor == nodo.valor:
+                return profundidad
+            if valor < nodo.valor:
+                nodo = nodo.izquierda
+            else:
+                nodo = nodo.derecha
+            profundidad += 1
+        return None
 
     def factor_balance(self, nodo):
-        pass
+        """Calcula el factor de balance de un nodo.
+
+        El factor se obtiene como la altura del subarbol izquierdo
+        menos la altura del subarbol derecho. Un arbol AVL valido
+        mantiene este factor entre -1 y 1 en todos sus nodos.
+
+        Args:
+            nodo (Nodo | None): Nodo a evaluar.
+
+        Returns:
+            int: Factor de balance del nodo, o 0 si es None.
+        """
+        if nodo is None:
+            return 0
+        return self._altura_nodo(nodo.izquierda) - self._altura_nodo(nodo.derecha)
+
+    def _actualizar_altura(self, nodo):
+        """Recalcula y guarda la altura de un nodo segun sus hijos.
+
+        Args:
+            nodo (Nodo): Nodo cuya altura se va a actualizar.
+        """
+        nodo.altura = 1 + max(
+            self._altura_nodo(nodo.izquierda),
+            self._altura_nodo(nodo.derecha),
+        )
 
     # --- Rotaciones ---
 
