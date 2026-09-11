@@ -390,9 +390,18 @@ class Arbol:
         return actual
 
     # --- Recorridos ---
+    # Preorden, inorden y postorden son las tres variantes de DFS
+    # (Depth-First Search / busqueda en profundidad): en los tres se
+    # baja lo mas profundo posible por una rama antes de retroceder,
+    # y solo cambia el momento en que se visita cada nodo respecto
+    # a sus hijos. Por niveles, en cambio, es BFS (Breadth-First
+    # Search / busqueda en anchura).
 
     def preorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
         """Recorre el arbol en preorden (raiz, izquierda, derecha).
+
+        Es una de las variantes de DFS (busqueda en profundidad):
+        visita la raiz antes que a sus hijos.
 
         Args:
             nodo (Nodo, optional): Nodo desde el cual continuar. Si
@@ -415,8 +424,10 @@ class Arbol:
     def inorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
         """Recorre el arbol en inorden (izquierda, raiz, derecha).
 
-        En un arbol de busqueda valido, este recorrido devuelve los
-        valores ordenados de menor a mayor.
+        Es una de las variantes de DFS (busqueda en profundidad):
+        visita la raiz entre sus dos hijos. En un arbol de busqueda
+        valido, este recorrido devuelve los valores ordenados de
+        menor a mayor.
 
         Args:
             nodo (Nodo, optional): Nodo desde el cual continuar. Si
@@ -439,6 +450,9 @@ class Arbol:
     def postorden(self, nodo=_SIN_ESPECIFICAR, resultado=None):
         """Recorre el arbol en postorden (izquierda, derecha, raiz).
 
+        Es una de las variantes de DFS (busqueda en profundidad):
+        visita la raiz despues que a sus hijos.
+
         Args:
             nodo (Nodo, optional): Nodo desde el cual continuar. Si
                 no se especifica, comienza desde la raiz.
@@ -458,7 +472,11 @@ class Arbol:
         return resultado
 
     def por_niveles(self):
-        """Recorre el arbol nivel por nivel (BFS), de arriba a abajo.
+        """Recorre el arbol nivel por nivel, de arriba a abajo.
+
+        Es BFS (Breadth-First Search / busqueda en anchura): recorre
+        el arbol nivel por nivel usando una cola, a diferencia de
+        preorden/inorden/postorden que son variantes de DFS.
 
         Returns:
             list: Valores del arbol ordenados por nivel de profundidad.
