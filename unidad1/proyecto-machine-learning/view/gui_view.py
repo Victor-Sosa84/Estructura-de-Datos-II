@@ -1,7 +1,7 @@
 """Vista grafica del juego de Tres en Raya, implementada en Tkinter."""
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import messagebox, ttk
 
 
 class GuiView:
@@ -115,6 +115,15 @@ class GuiView:
         """Vacia visualmente las 9 casillas del tablero."""
         for boton in self.botones:
             boton["text"] = " "
+
+    def mostrar_mensaje(self, titulo, mensaje):
+        """Muestra un mensaje emergente al usuario.
+
+        Args:
+            titulo (str): Titulo de la ventana del mensaje.
+            mensaje (str): Texto del mensaje.
+        """
+        messagebox.showinfo(titulo, mensaje)
 
     def obtener_modo(self):
         """Obtiene el modo de juego elegido en el menu.
