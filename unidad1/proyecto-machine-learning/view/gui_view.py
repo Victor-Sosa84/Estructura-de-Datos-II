@@ -27,6 +27,8 @@ class GuiView:
         boton_reiniciar (tk.Button): Reinicia la partida en el
             mismo modo.
         boton_menu (tk.Button): Vuelve al menu de seleccion de modo.
+        etiqueta_metricas (tk.Label): Muestra los nodos explorados y
+            el tiempo de respuesta de la IA.
     """
 
     def __init__(self, root, modos=None):
@@ -85,8 +87,13 @@ class GuiView:
             boton.grid(row=fila, column=columna)
             self.botones.append(boton)
 
+        self.etiqueta_metricas = tk.Label(
+            self.frame_juego, text="", font=("Arial", 10)
+        )
+        self.etiqueta_metricas.grid(row=5, column=0, columnspan=3, pady=5)
+
         frame_acciones = tk.Frame(self.frame_juego)
-        frame_acciones.grid(row=5, column=0, columnspan=3, pady=10)
+        frame_acciones.grid(row=6, column=0, columnspan=3, pady=10)
 
         self.boton_reiniciar = tk.Button(frame_acciones, text="Reiniciar")
         self.boton_reiniciar.pack(side=tk.LEFT, padx=5)
@@ -115,6 +122,21 @@ class GuiView:
         """Vacia visualmente las 9 casillas del tablero."""
         for boton in self.botones:
             boton["text"] = " "
+
+    def mostrar_metricas(self, nodos, segundos):
+        """Muestra los nodos explorados y el tiempo de respuesta de la IA.
+
+        Args:
+            nodos (int): Cantidad de nodos evaluados en la busqueda.
+            segundos (float): Tiempo que tardo la IA, en segundos.
+        """
+        self.etiqueta_metricas["text"] = (
+            f"Nodos explorados: {nodos} | Tiempo: {segundos * 1000:.1f} ms"
+        )
+
+    def limpiar_metricas(self):
+        """Borra las metricas mostradas de la jugada anterior."""
+        self.etiqueta_metricas["text"] = ""
 
     def mostrar_mensaje(self, titulo, mensaje):
         """Muestra un mensaje emergente al usuario.

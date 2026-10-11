@@ -1,5 +1,7 @@
 """Controlador del juego de Tres en Raya (Humano vs Humano y vs IA)."""
 
+import time
+
 
 class GameController:
     """Orquesta la interaccion entre la vista, el modelo y la IA.
@@ -59,7 +61,20 @@ class GameController:
         partida_terminada = self._jugar(posicion)
 
         if not partida_terminada and self.modo == self.MODO_IA:
-            self._jugar(self.agente.best_move(self.modelo))
+            self._turno_ia()
+
+    def _turno_ia(self):
+        """Hace que la IA elija y juegue, mostrando sus metricas.
+
+        Mide cuanto tarda Minimax en decidir y cuantos nodos exploro,
+        y recien despues aplica la jugada.
+        """
+        inicio = time.perf_counter()
+        movimiento = self.agente.best_move(self.modelo)
+        duracion = time.perf_counter() - inicio
+
+        self.vista.mostrar_metricas(self.agente.nodes_evaluated, duracion)
+        self._jugar(movimiento)
 
     def _jugar(self, posicion):
         """Aplica la jugada del jugador en turno y actualiza la vista.
@@ -99,6 +114,7 @@ class GameController:
         """Reinicia el modelo y la vista, manteniendo el mismo modo."""
         self.modelo.reset()
         self.vista.limpiar_tablero()
+        self.vista.limpiar_metricas()
         self.vista.actualizar_estado(f"Turno: {self.modelo.current_player}")
 
     def volver_al_menu(self):
