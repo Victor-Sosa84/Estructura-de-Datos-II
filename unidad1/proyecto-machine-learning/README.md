@@ -31,6 +31,8 @@ proyecto-machine-learning/
 │   ├── detalle_comparacion.csv       # Resultado por tablero de la comparación
 │   ├── reglas_arbol.txt              # Reglas que aprendió el árbol
 │   └── resultados_comparacion.txt    # Reporte de la comparación
+├── docs/
+│   └── informe_analisis.pdf   # Informe del análisis comparativo
 ├── model/
 │   ├── __init__.py
 │   ├── game_model.py        # Tablero, reglas, victoria y empate
@@ -133,5 +135,5 @@ Sobre los tableros que el árbol no vio al entrenar, coincide con Minimax en
 el 53% y conserva el resultado teórico en el 75%. En Tres en Raya Minimax
 es exacto y casi siempre igual de rápido, porque el árbol de búsqueda es
 pequeño. El aprendizaje automático se justifica en juegos donde explorar
-todo el árbol es inviable. El análisis completo está en el informe del
-proyecto.
+todo el árbol es inviable. 
+El análisis completo está en el [informe del proyecto](docs/informe_analisis.pdf).
