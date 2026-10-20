@@ -1,8 +1,8 @@
 """
 titulo: Tres en Raya - MVC (Humano vs Humano y Humano vs IA)
 nombre: Victor David Sosa Coca
-fecha: 09/09/2026
-version: 1.0
+fecha: 20/10/2026
+version: 3.0
 """
 
 import tkinter as tk
