@@ -312,3 +312,29 @@ class MLAgent:
             ax=ejes,
         )
         figura.savefig(ruta, dpi=150, bbox_inches="tight")
+
+    def best_move(self, modelo):
+        """Elige la jugada de la IA segun lo que aprendio el arbol.
+
+        El arbol predice la casilla que habria elegido Minimax. Como
+        puede equivocarse y proponer una casilla ya ocupada, en ese
+        caso se juega la primera casilla libre. Asume que la IA juega
+        como 'O', igual que en los datos de entrenamiento.
+
+        Args:
+            modelo (GameModel): Modelo del juego con el tablero actual.
+
+        Returns:
+            int | None: Indice de la casilla elegida (0-8), o None si
+            no hay casillas libres.
+        """
+        self._requerir_entrenado()
+        disponibles = modelo.get_available_moves()
+        if not disponibles:
+            return None
+
+        casillas = [self.CODIFICACION[c] for c in modelo.board]
+        fila = pd.DataFrame([casillas], columns=self.COLUMNAS)
+        prediccion = int(self.clasificador.predict(fila)[0])
+
+        return prediccion if prediccion in disponibles else disponibles[0]

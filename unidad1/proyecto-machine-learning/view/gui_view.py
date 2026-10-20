@@ -51,7 +51,9 @@ class GuiView:
         """Arma la pantalla de menu con el selector de modo."""
         self.frame_menu = tk.Frame(self.root, padx=40, pady=30)
 
-        tk.Label(self.frame_menu, text="Tres en Raya", font=("Arial", 18)).pack(pady=10)
+        tk.Label(
+            self.frame_menu, text="Tres en Raya", font=("Arial", 18)
+        ).pack(pady=10)
         tk.Label(self.frame_menu, text="Modo de juego:").pack()
 
         self.selector_modo = ttk.Combobox(
@@ -80,7 +82,8 @@ class GuiView:
         self.botones = []
         for posicion in range(9):
             boton = tk.Button(
-                self.frame_juego, text=" ", font=("Arial", 24), width=4, height=2
+                self.frame_juego, text=" ", font=("Arial", 24),
+                width=4, height=2
             )
             fila = 2 + posicion // 3
             columna = posicion % 3
@@ -124,15 +127,18 @@ class GuiView:
             boton["text"] = " "
 
     def mostrar_metricas(self, nodos, segundos):
-        """Muestra los nodos explorados y el tiempo de respuesta de la IA.
+        """Muestra el tiempo de respuesta de la IA y, si hay, sus nodos.
 
         Args:
-            nodos (int): Cantidad de nodos evaluados en la busqueda.
+            nodos (int | None): Cantidad de nodos evaluados en la
+                busqueda, o None si la IA no explora nodos (como el
+                arbol de decision).
             segundos (float): Tiempo que tardo la IA, en segundos.
         """
-        self.etiqueta_metricas["text"] = (
-            f"Nodos explorados: {nodos} | Tiempo: {segundos * 1000:.1f} ms"
-        )
+        texto = f"Tiempo: {segundos * 1000:.1f} ms"
+        if nodos is not None:
+            texto = f"Nodos explorados: {nodos} | {texto}"
+        self.etiqueta_metricas["text"] = texto
 
     def limpiar_metricas(self):
         """Borra las metricas mostradas de la jugada anterior."""

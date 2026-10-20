@@ -1,4 +1,4 @@
-"""Controlador del juego de Tres en Raya (Humano vs Humano y vs IA)."""
+"""Controlador del juego de Tres en Raya (vs humano, Minimax y ML)."""
 
 import time
 
@@ -6,9 +6,10 @@ import time
 class GameController:
     """Orquesta la interaccion entre la vista, el modelo y la IA.
 
-    Conecta los botones de la vista con la logica del juego, y en el
-    modo Humano vs IA hace que el agente Minimax responda despues de
-    cada jugada del humano. El humano juega siempre como 'X' y la IA
+    Conecta los botones de la vista con la logica del juego, y en los
+    modos contra la IA hace que un agente responda despues de cada
+    jugada del humano: Minimax en Humano vs IA y el arbol de decision
+    en Humano vs IA (ML). El humano juega siempre como 'X' y la IA
     como 'O'.
 
     Attributes:
@@ -17,23 +18,29 @@ class GameController:
             se muestran actualizaciones.
         agente (MinimaxAgent): Agente que juega como 'O' en el modo
             Humano vs IA.
+        agente_ml (MLAgent): Agente que juega como 'O' en el modo
+            Humano vs IA (ML).
         modo (str): Modo de la partida en curso.
     """
 
     MODO_HUMANO = "Humano vs Humano"
     MODO_IA = "Humano vs IA"
+    MODO_ML = "Humano vs IA (ML)"
 
-    def __init__(self, modelo, vista, agente):
+    def __init__(self, modelo, vista, agente, agente_ml):
         """Inicializa el controlador y conecta los botones de la vista.
 
         Args:
             modelo (GameModel): Instancia del modelo del juego.
             vista (GuiView): Instancia de la vista ya construida.
-            agente (MinimaxAgent): Agente de IA que juega como 'O'.
+            agente (MinimaxAgent): Agente Minimax que juega como 'O'.
+            agente_ml (MLAgent): Agente de ML ya entrenado, que juega
+                como 'O'.
         """
         self.modelo = modelo
         self.vista = vista
         self.agente = agente
+        self.agente_ml = agente_ml
         self.modo = self.MODO_HUMANO
 
         for posicion, boton in enumerate(self.vista.botones):
@@ -60,20 +67,25 @@ class GameController:
 
         partida_terminada = self._jugar(posicion)
 
-        if not partida_terminada and self.modo == self.MODO_IA:
+        if not partida_terminada and self.modo != self.MODO_HUMANO:
             self._turno_ia()
 
     def _turno_ia(self):
         """Hace que la IA elija y juegue, mostrando sus metricas.
 
-        Mide cuanto tarda Minimax en decidir y cuantos nodos exploro,
-        y recien despues aplica la jugada.
+        Usa el agente que corresponde al modo. Mide cuanto tarda en
+        decidir y, si es Minimax, cuantos nodos exploro (el arbol de
+        decision no explora nodos), y recien despues aplica la jugada.
         """
+        usa_ml = self.modo == self.MODO_ML
+        agente = self.agente_ml if usa_ml else self.agente
+
         inicio = time.perf_counter()
-        movimiento = self.agente.best_move(self.modelo)
+        movimiento = agente.best_move(self.modelo)
         duracion = time.perf_counter() - inicio
 
-        self.vista.mostrar_metricas(self.agente.nodes_evaluated, duracion)
+        nodos = None if usa_ml else agente.nodes_evaluated
+        self.vista.mostrar_metricas(nodos, duracion)
         self._jugar(movimiento)
 
     def _jugar(self, posicion):
