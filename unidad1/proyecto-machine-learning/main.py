@@ -1,5 +1,6 @@
 """
-titulo: Tres en Raya - MVC (Humano vs Humano y Humano vs IA)
+titulo: Tres en Raya - MVC (Humano vs Humano, Humano vs IA (Minimax) 
+y Humano vs IA (ML))
 nombre: Victor David Sosa Coca
 fecha: 20/10/2026
 version: 3.0
