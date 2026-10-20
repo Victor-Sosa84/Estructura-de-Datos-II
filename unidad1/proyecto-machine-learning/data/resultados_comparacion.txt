@@ -1,0 +1,49 @@
+COMPARACION: MINIMAX VS ARBOL DE DECISION
+
+1. VELOCIDAD (mejor de 3 intentos por jugada, 2097 tableros posibles)
+                               Minimax    Arbol ML
+Promedio (ms)                     1.61        1.94
+Mediana (ms)                      0.13        1.78
+Maximo (ms)                     316.24        5.64
+Nodos explorados (prom.)           415           -
+
+Por momento de la partida (promedios):
+Jugada de O     Tableros   Minimax ms   Arbol ms   Nodos Minimax
+1ra                    9       223.51       2.41           61104
+2da                  252         4.56       2.12            1090
+3ra                 1140         0.18       1.93              39
+4ta                  696         0.02       1.87               3
+
+Del tiempo del arbol, casi todo es costo de pandas y sklearn al preparar la entrada.
+Solo la prediccion (numpy, promedio): 0.314 ms por jugada.
+
+2. PRECISION DE LAS JUGADAS DEL ARBOL (la jugada que realmente juega)
+                                Tableros  Igual a Minimax   Optima  No empeora
+Todos los tableros                  2097              62%      75%         80%
+Tableros que el arbol no vio        1707              53%      69%         75%
+Tableros de entrenamiento            390             100%     100%        100%
+
+Igual a Minimax: misma casilla que elige Minimax.
+Optima: casilla con el mejor puntaje (gana o empata lo mas rapido posible).
+No empeora: conserva el resultado teorico (gana, empata o pierde igual).
+Minimax elige siempre una jugada optima (100%) por definicion.
+La cifra que mide si el arbol generaliza es la de los tableros que no vio.
+Predicciones del arbol sobre casilla ocupada (tableros no vistos): 13%
+En ese caso el agente juega la primera casilla libre.
+
+3. PARTIDAS (1000 por enfrentamiento, el agente juega como O)
+Rival (X)             Agente          Gana   Empata   Pierde
+Aleatorio             Minimax          823      177        0
+Aleatorio             Arbol ML         817      171       12
+Perfecto              Minimax            0     1000        0
+Perfecto              Arbol ML           0      991        9
+
+Rival perfecto: Minimax que elige al azar entre sus jugadas optimas.
+Minimax invicto (0 derrotas en total): SI
+
+4. DATOS DEL MODELO
+Tableros en el dataset: 390
+Profundidad del arbol: 14
+Hojas del arbol: 165
+Validacion cruzada (misma casilla que Minimax, sobre tableros no vistos):
+  promedio 57.2%, minimo 50.0%, maximo 61.5%
