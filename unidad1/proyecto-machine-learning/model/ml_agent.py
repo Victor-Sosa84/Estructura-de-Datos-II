@@ -1,25 +1,41 @@
 """Agente de Machine Learning y generacion de su dataset."""
 
 import random
+from pathlib import Path
+
+import pandas as pd
 
 from model.game_model import GameModel
 from model.minimax_agent import MinimaxAgent
+
+RUTA_DATASET = Path(__file__).resolve().parent.parent / "data" / "dataset.csv"
 
 
 class MLAgent:
     """Agente que aprende a jugar imitando a Minimax.
 
     Reune el pipeline de Machine Learning del proyecto. Por ahora
-    implementa la generacion de datos: simula partidas automaticas
-    entre Minimax y un jugador aleatorio, y registra cada decision
-    de Minimax para usarla luego como ejemplo de entrenamiento.
+    implementa la preparacion de datos: simula partidas automaticas
+    entre Minimax y un jugador aleatorio, registra cada decision de
+    Minimax y la guarda como un dataset numerico en un CSV.
 
     Attributes:
+        CODIFICACION (dict): Valor numerico de cada casilla, ya que
+            el modelo solo trabaja con numeros: 'X' vale 1, 'O' vale
+            -1 y vacia vale 0.
+        COLUMNAS (list[str]): Nombres de las 9 columnas de entrada,
+            una por casilla del tablero.
+        COLUMNA_OBJETIVO (str): Nombre de la columna con la jugada
+            que debe aprender a predecir el modelo.
         ai_player (str): Simbolo de la IA, que en las simulaciones
             juega como Minimax ('O').
         human_player (str): Simbolo del rival aleatorio, que mueve
             primero ('X'), igual que el humano en la aplicacion.
     """
+
+    CODIFICACION = {' ': 0, 'X': 1, 'O': -1}
+    COLUMNAS = [f"casilla_{i}" for i in range(9)]
+    COLUMNA_OBJETIVO = "jugada"
 
     def __init__(self, ai_player='O', human_player='X'):
         """Inicializa el agente indicando que simbolo juega cada lado.
@@ -96,3 +112,74 @@ class MLAgent:
             dataset.extend(self.simular_partida(minimax, rng, cache))
 
         return dataset
+
+    def a_dataframe(self, dataset):
+        """Convierte los registros en una tabla numerica sin repetidos.
+
+        Cada tablero pasa a 9 columnas de entrada (casillas
+        codificadas) mas la columna de la jugada. Se deja un solo
+        registro por tablero: Minimax siempre elige lo mismo ante el
+        mismo tablero, asi que los repetidos no aportan informacion
+        y, al separar entrenamiento y prueba, harian que el mismo
+        tablero apareciera en ambos lados.
+
+        Args:
+            dataset (list[tuple]): Registros (tablero, jugada) tal
+                como los devuelve generar_dataset.
+
+        Returns:
+            pd.DataFrame: Tabla con una fila por tablero distinto.
+        """
+        filas = [
+            [self.CODIFICACION[casilla] for casilla in tablero] + [jugada]
+            for tablero, jugada in dataset
+        ]
+        tabla = pd.DataFrame(
+            filas, columns=self.COLUMNAS + [self.COLUMNA_OBJETIVO]
+        )
+        tabla = tabla.drop_duplicates(subset=self.COLUMNAS)
+        return tabla.reset_index(drop=True)
+
+    def guardar_csv(self, tabla, ruta=RUTA_DATASET):
+        """Guarda la tabla en un archivo CSV, creando la carpeta.
+
+        Args:
+            tabla (pd.DataFrame): Tabla a guardar.
+            ruta (str | Path, optional): Destino del archivo. Por
+                defecto data/dataset.csv dentro del proyecto.
+        """
+        ruta = Path(ruta)
+        ruta.parent.mkdir(parents=True, exist_ok=True)
+        tabla.to_csv(ruta, index=False)
+
+    def cargar_csv(self, ruta=RUTA_DATASET):
+        """Lee el dataset desde un archivo CSV.
+
+        Args:
+            ruta (str | Path, optional): Archivo a leer. Por defecto
+                data/dataset.csv dentro del proyecto.
+
+        Returns:
+            pd.DataFrame: Tabla con las columnas de entrada y la
+            jugada.
+        """
+        return pd.read_csv(ruta)
+
+    def generar_csv(self, partidas=1000, semilla=42, ruta=RUTA_DATASET):
+        """Simula las partidas y deja el dataset listo en un CSV.
+
+        Args:
+            partidas (int, optional): Cantidad de partidas a
+                simular. Por defecto 1000.
+            semilla (int, optional): Semilla del generador aleatorio,
+                para obtener siempre el mismo dataset. Por defecto 42.
+            ruta (str | Path, optional): Destino del archivo. Por
+                defecto data/dataset.csv dentro del proyecto.
+
+        Returns:
+            pd.DataFrame: Tabla guardada en el CSV.
+        """
+        dataset = self.generar_dataset(partidas, semilla)
+        tabla = self.a_dataframe(dataset)
+        self.guardar_csv(tabla, ruta)
+        return tabla
