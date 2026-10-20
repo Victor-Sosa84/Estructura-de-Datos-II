@@ -101,7 +101,8 @@ class GameModel:
         Returns:
             bool: True si hay un ganador o la partida esta empatada.
         """
-        return self.check_winner('X') or self.check_winner('O') or self.is_draw()
+        gano = self.check_winner('X') or self.check_winner('O')
+        return gano or self.is_draw()
 
     def switch_player(self):
         """Cambia el turno al otro jugador."""
