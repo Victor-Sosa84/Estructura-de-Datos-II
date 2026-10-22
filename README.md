@@ -16,3 +16,7 @@ Repositorio de tareas y proyectos para la materia de Estructura de Datos II
 
 Cada carpeta de unidad tiene su propio `README.md` con el detalle de lo
 que contiene.
+
+## Proyecto de Machine Learning
+
+- [`proyecto-machine-learning/`](proyecto-machine-learning/): aplicación de tres en raya que usa un árbol de decisión para elegir jugadas. El modelo se entrena con tableros etiquetados por Minimax. Incluye el código, los datos y las instrucciones para ejecutarlo.
