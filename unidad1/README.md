@@ -8,3 +8,7 @@
   construyendo un árbol de expresión (no un ABB) y obteniendo el resultado
   mediante los recorridos preorden y postorden. Aplicación con interfaz
   gráfica en Flet, estructurada bajo el patrón MVC.
+- `proyecto-machine-learning/`: Juego de Tres en Raya con arquitectura MVC
+  que compara Minimax con un árbol de decisión entrenado para imitar sus
+  jugadas. Incluye generación del dataset, entrenamiento, interfaz gráfica
+  y comparación de agentes.
